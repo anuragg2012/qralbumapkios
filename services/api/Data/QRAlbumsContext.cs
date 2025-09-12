@@ -3,7 +3,7 @@ using QRAlbums.API.Models;
 
 namespace QRAlbums.API.Data;
 
-public class QRAlbumsContext : DbContext
+public sealed class QRAlbumsContext : DbContext
 {
     public QRAlbumsContext(DbContextOptions<QRAlbumsContext> options) : base(options)
     {

@@ -18,11 +18,14 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.Configure<BunnyOptions>(builder.Configuration.GetSection("Bunny"));
 
 // Add services
-builder.Services.AddDbContext<QRAlbumsContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("Default"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("Default"))
-    ));
+builder.Services.AddDbContext<QRAlbumsContext>(opts =>
+{
+    var cs = builder.Configuration.GetConnectionString("Default") ??
+             Environment.GetEnvironmentVariable("ConnectionStrings__Default");
+    if (string.IsNullOrWhiteSpace(cs))
+        throw new InvalidOperationException("DB connection string not configured");
+    opts.UseMySql(cs, ServerVersion.AutoDetect(cs));
+});
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException("JWT secret not configured");
@@ -47,7 +50,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<ISelectionService, SelectionService>();
-builder.Services.AddScoped<IBunnyService, BunnyService>();
+builder.Services.AddHttpClient<IBunnyService, BunnyService>();
 builder.Services.AddScoped<IQRService, QRService>();
 
 // CORS
