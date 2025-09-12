@@ -24,7 +24,7 @@ builder.Services.AddDbContext<QRAlbumsContext>(opts =>
              Environment.GetEnvironmentVariable("ConnectionStrings__Default");
     if (string.IsNullOrWhiteSpace(cs))
         throw new InvalidOperationException("DB connection string not configured");
-    opts.UseMySql(cs, ServerVersion.AutoDetect(cs));
+    opts.UseNpgsql(cs);
 });
 
 // JWT Authentication

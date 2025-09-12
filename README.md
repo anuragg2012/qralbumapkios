@@ -5,7 +5,7 @@ A comprehensive QR-based album management system with mobile app and API backend
 ## Architecture
 
 - **Mobile App**: Ionic + Angular with Capacitor (Android/iOS)
-- **API**: .NET 8 Minimal API with EF Core and MySQL
+- **API**: .NET 8 Minimal API with EF Core and Supabase (PostgreSQL)
 - **Media**: Bunny Storage + CDN + Stream integration
 - **Auth**: JWT-based authentication
 - **QR**: Dynamic QR code generation for album sharing
@@ -16,7 +16,7 @@ A comprehensive QR-based album management system with mobile app and API backend
 
 - Node.js 18+ LTS
 - .NET 8 SDK
-- MySQL 8.0+
+- Supabase PostgreSQL database
 - Android Studio (for Android builds)
 - Xcode (for iOS builds, macOS only)
 
@@ -36,7 +36,7 @@ npm install
 
 3. **Configure API environment** (`backend/api/.env`):
 ```bash
-ConnectionStrings__Default="Server=localhost;Database=qralbums;Uid=root;Pwd=yourpassword;"
+ConnectionStrings__Default="Host=your_supabase_host;Port=5432;Database=postgres;Username=postgres;Password=yourpassword;SslMode=Require;Trust Server Certificate=true"
 Jwt__Secret="your-super-secret-jwt-key-min-32-chars"
 Bunny__StorageZone="your-storage-zone"
 Bunny__AccessKey="your-bunny-access-key"
