@@ -38,3 +38,8 @@ yarn-error.log*
 
 # IDE and project settings
 .vscode/
+/backend/api/.vs/QRAlbums.API
+/backend/api/obj/Debug/net8.0/QRAlbums.API.AssemblyInfo.cs
+/backend/api/obj/Debug/net8.0/QRAlbums.API.AssemblyInfoInputs.cache
+/backend/api/obj/Debug/net8.0/QRAlbums.API.assets.cache
+/backend/api/obj/Debug/net8.0/QRAlbums.API.GeneratedMSBuildEditorConfig.editorconfig
