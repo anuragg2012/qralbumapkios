@@ -37,16 +37,6 @@ public interface ISelectionService
     Task<CreateSessionResponse> CreateSessionAsync(string slug);
     Task<SubmitSelectionsResponse> SubmitSelectionsAsync(string slug, SubmitSelectionsRequest request);
 }
-
-public interface IBunnyService
-{
-    Task<string> UploadFileAsync(byte[] content, string path, string contentType);
-    string GetCdnUrl(string path);
-    string GetImageUrl(string filePath, int? width = null, int? height = null, string? fit = null, int? quality = null, bool watermark = false, string? watermarkText = null);
-    string GetVideoUrl(string libraryId, string videoId);
-    string Sign(string fullPathWithQuery, DateTimeOffset expiresAt);
-}
-
 public interface IQRService
 {
     string GenerateQRCodeBase64(string url, int pixelsPerModule = 20);

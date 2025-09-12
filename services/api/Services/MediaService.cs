@@ -40,22 +40,21 @@ public class MediaService : IMediaService
         int? width = null;
         int? height = null;
 
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        var fileBytes = stream.ToArray();
-
         if (kind == ItemKind.IMAGE)
         {
-            // Upload original image only
             var originalPath = $"{basePath}/original/{guid}{extension}";
-            srcUrl = await _bunnyService.UploadFileAsync(fileBytes, originalPath, file.ContentType);
+            using var upload = file.OpenReadStream();
+            var ok = await _bunnyService.PutAsync(originalPath, upload, file.ContentType);
+            if (!ok) throw new InvalidOperationException("Bunny upload failed");
+            srcUrl = _bunnyService.BuildCdnUrl(originalPath);
         }
         else if (kind == ItemKind.VIDEO)
         {
-            // For videos, upload to Bunny Stream
-            // This is a simplified implementation - in production, you'd use Bunny Stream API
             var videoPath = $"{basePath}/video/{guid}{extension}";
-            srcUrl = await _bunnyService.UploadFileAsync(fileBytes, videoPath, file.ContentType);
+            using var upload = file.OpenReadStream();
+            var ok = await _bunnyService.PutAsync(videoPath, upload, file.ContentType);
+            if (!ok) throw new InvalidOperationException("Bunny upload failed");
+            srcUrl = _bunnyService.BuildCdnUrl(videoPath);
         }
         else
         {

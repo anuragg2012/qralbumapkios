@@ -10,6 +10,14 @@ dist/
 build/
 **/build/
 
+# Mobile build output
+android/
+ios/
+
+# .NET build output
+services/**/bin/
+services/**/obj/
+
 # Angular cache
 .angular/
 **/.angular/

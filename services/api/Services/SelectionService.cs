@@ -7,12 +7,10 @@ namespace QRAlbums.API.Services;
 public class SelectionService : ISelectionService
 {
     private readonly QRAlbumsContext _context;
-    private readonly IBunnyService _bunnyService;
 
-    public SelectionService(QRAlbumsContext context, IBunnyService bunnyService)
+    public SelectionService(QRAlbumsContext context)
     {
         _context = context;
-        _bunnyService = bunnyService;
     }
 
     public async Task<ViewerAlbumDto?> GetViewerAlbumAsync(string slug)
