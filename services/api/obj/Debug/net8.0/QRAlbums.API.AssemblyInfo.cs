@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QRAlbums.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+771a47f4c8f41e292652531f0c008f4e0e94a98e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e607887a45d4a71c7a1d930ecad0e7ea9cb6881")]
 [assembly: System.Reflection.AssemblyProductAttribute("QRAlbums.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QRAlbums.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
