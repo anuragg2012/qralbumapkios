@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
   IonFab, IonFabButton, IonIcon, IonList, IonItem, IonLabel, IonCard, 
-  IonCardContent, IonSpinner, IonText, IonBadge, AlertController
+  IonCardContent, IonSpinner, IonText, IonBadge, AlertController,
+  IonButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline } from 'ionicons/icons';
@@ -19,8 +20,8 @@ import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion } from '.
   standalone: true,
   imports: [
     CommonModule,
-    IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
-    IonFab, IonFabButton, IonIcon, IonList, IonItem, IonLabel, IonCard,
+    IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,IonButton,
+    IonFab, IonFabButton, IonIcon, IonList, IonCard,
     IonCardContent, IonSpinner, IonText, IonBadge
   ]
 })

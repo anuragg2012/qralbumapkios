@@ -43,3 +43,11 @@ yarn-error.log*
 /backend/api/obj/Debug/net8.0/QRAlbums.API.AssemblyInfoInputs.cache
 /backend/api/obj/Debug/net8.0/QRAlbums.API.assets.cache
 /backend/api/obj/Debug/net8.0/QRAlbums.API.GeneratedMSBuildEditorConfig.editorconfig
+/backend/api/obj/Debug/net8.0/QRAlbums.API.csproj.AssemblyReference.cache
+/backend/api/obj/Debug/net8.0/QRAlbums.API.csproj.CoreCompileInputs.cache
+/backend/api/obj/Debug/net8.0/QRAlbums.API.csproj.FileListAbsolute.txt
+/backend/api/obj/Debug/net8.0/QRAlbums.API.sourcelink.json
+/backend/api/obj/project.assets.json
+/backend/api/obj/QRAlbums.API.csproj.nuget.dgspec.json
+/backend/api/obj/QRAlbums.API.csproj.nuget.g.props
+/backend/api/obj/project.nuget.cache
