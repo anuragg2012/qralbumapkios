@@ -34,7 +34,7 @@ npm install
    - Get Access Key from Account Settings
    - Optional: Set up Stream Library for video uploads
 
-3. **Configure API environment** (`services/api/.env`):
+3. **Configure API environment** (`backend/api/.env`):
 ```bash
 ConnectionStrings__Default="Server=localhost;Database=qralbums;Uid=root;Pwd=yourpassword;"
 Jwt__Secret="your-super-secret-jwt-key-min-32-chars"
@@ -45,7 +45,7 @@ Bunny__StreamLibraryId="your-stream-library-id"
 Frontend__ViewerBaseUrl="https://viewer.qralbums.app"
 ```
 
-4. **Configure Mobile environment** (`apps/mobile/src/environments/environment.ts`):
+4. **Configure Mobile environment** (`frontend/mobile/src/environments/environment.ts`):
 ```typescript
 export const environment = {
   production: false,
@@ -56,7 +56,7 @@ export const environment = {
 
 5. **Set up database**:
 ```bash
-cd services/api
+cd backend/api
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
@@ -90,7 +90,7 @@ npm run sync:ios
 keytool -genkey -v -keystore qr-albums-release-key.keystore -alias qr-albums -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-2. **Configure signing** (`apps/mobile/android/app/build.gradle`):
+2. **Configure signing** (`frontend/mobile/android/app/build.gradle`):
 ```gradle
 android {
     signingConfigs {
@@ -113,7 +113,7 @@ android {
 
 3. **Build release**:
 ```bash
-cd apps/mobile
+cd frontend/mobile
 ionic build --prod
 npx cap sync android
 
@@ -126,17 +126,17 @@ cd android
 ```
 
 4. **Outputs**:
-   - AAB: `apps/mobile/android/app/build/outputs/bundle/release/app-release.aab`
-   - APK: `apps/mobile/android/app/build/outputs/apk/release/app-release.apk`
+   - AAB: `frontend/mobile/android/app/build/outputs/bundle/release/app-release.aab`
+   - APK: `frontend/mobile/android/app/build/outputs/apk/release/app-release.apk`
 
 ### iOS Release (IPA)
 
 1. **Configure bundle ID and signing** in Xcode:
-   - Open `apps/mobile/ios/App/App.xcworkspace`
+   - Open `frontend/mobile/ios/App/App.xcworkspace`
    - Set Bundle Identifier: `com.earthinfosystems.qralbums`
    - Configure Team and Provisioning Profile
 
-2. **Add camera permission** (`apps/mobile/ios/App/App/Info.plist`):
+2. **Add camera permission** (`frontend/mobile/ios/App/App/Info.plist`):
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>This app needs access to camera to capture photos for albums</string>
@@ -144,7 +144,7 @@ cd android
 
 3. **Build for release**:
 ```bash
-cd apps/mobile
+cd frontend/mobile
 ionic build --prod
 npx cap sync ios
 npx cap open ios
@@ -207,15 +207,14 @@ npx cap open ios
 
 ```
 qr-albums-monorepo/
-├── apps/
+├── frontend/
 │   └── mobile/                 # Ionic Angular mobile app
-├── services/
+├── backend/
 │   └── api/                    # .NET 8 Minimal API
 ├── infrastructure/
 │   ├── sql/                    # Database schema and migrations
 │   ├── postman/               # API testing collections
 │   └── docs/                  # Additional documentation
-├── docker/                     # Docker configurations
 └── docs/                      # Project documentation
 ```
 
