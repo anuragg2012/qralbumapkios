@@ -15,8 +15,13 @@ android/
 ios/
 
 # .NET build output
-backend/**/bin/
-backend/**/obj/
+**/bin/
+**/obj/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
 
 # Angular cache
 .angular/
@@ -31,4 +36,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.angular/
+# IDE and project settings
+.vscode/
