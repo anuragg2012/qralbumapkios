@@ -24,7 +24,7 @@ public sealed class QRAlbumsContextFactory : IDesignTimeDbContextFactory<QRAlbum
                  ?? throw new InvalidOperationException("ConnectionStrings:Default missing");
 
         var builder = new DbContextOptionsBuilder<QRAlbumsContext>();
-        builder.UseMySql(cs, ServerVersion.AutoDetect(cs));
+        builder.UseNpgsql(cs);
         return new QRAlbumsContext(builder.Options);
     }
 }
