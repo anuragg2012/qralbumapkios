@@ -15,8 +15,8 @@ android/
 ios/
 
 # .NET build output
-services/**/bin/
-services/**/obj/
+backend/**/bin/
+backend/**/obj/
 
 # Angular cache
 .angular/

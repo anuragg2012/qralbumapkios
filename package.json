@@ -4,21 +4,21 @@
   "private": true,
   "description": "QR Albums - Production monorepo for album management and media sharing",
   "workspaces": [
-    "apps/mobile"
+    "frontend/mobile"
   ],
   "scripts": {
-    "dev:mobile": "cd apps/mobile && ionic serve",
-    "dev:api": "cd services/api && dotnet run",
-    "build:mobile": "cd apps/mobile && ionic build",
-    "build:api": "cd services/api && dotnet build",
-    "sync:android": "cd apps/mobile && npx cap sync android",
-    "sync:ios": "cd apps/mobile && npx cap sync ios",
-    "open:android": "cd apps/mobile && npx cap open android",
-    "open:ios": "cd apps/mobile && npx cap open ios",
-    "lint": "eslint apps/mobile/src/**/*.{ts,tsx}",
-    "format": "prettier --write apps/mobile/src/**/*.{ts,tsx,html,scss}",
-    "db:migrate": "cd services/api && dotnet ef migrations add",
-    "db:update": "cd services/api && dotnet ef database update"
+    "dev:mobile": "cd frontend/mobile && ionic serve",
+    "dev:api": "cd backend/api && dotnet run",
+    "build:mobile": "cd frontend/mobile && ionic build",
+    "build:api": "cd backend/api && dotnet build",
+    "sync:android": "cd frontend/mobile && npx cap sync android",
+    "sync:ios": "cd frontend/mobile && npx cap sync ios",
+    "open:android": "cd frontend/mobile && npx cap open android",
+    "open:ios": "cd frontend/mobile && npx cap open ios",
+    "lint": "eslint frontend/mobile/src/**/*.{ts,tsx}",
+    "format": "prettier --write frontend/mobile/src/**/*.{ts,tsx,html,scss}",
+    "db:migrate": "cd backend/api && dotnet ef migrations add",
+    "db:update": "cd backend/api && dotnet ef database update"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",
