@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=mysql;Database=qralbums;Uid=root;Pwd=rootpassword;
+      - Jwt__Secret=your-super-secret-jwt-key-minimum-32-characters
+      - Bunny__StorageZone=your-storage-zone
+      - Bunny__AccessKey=your-access-key
+      - Bunny__CdnBase=https://your-zone.b-cdn.net
+      - Frontend__ViewerBaseUrl=https://viewer.qralbums.app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - qr-albums-network
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=qralbums
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../infrastructure/sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - qr-albums-network
+
+volumes:
+  mysql_data:
+
+networks:
+  qr-albums-network:
+    driver: bridge

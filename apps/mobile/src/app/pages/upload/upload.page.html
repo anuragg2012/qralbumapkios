@@ -1,0 +1,102 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Upload Media</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="uploadAll()" [disabled]="!canUpload()">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+        Upload
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="items.length === 0" class="empty-state">
+    <ion-icon name="images-outline" size="large"></ion-icon>
+    <h3>No Media Selected</h3>
+    <p>Take photos or select from your gallery to upload to this album</p>
+    <ion-button fill="outline" (click)="addMedia()">
+      <ion-icon name="camera-outline" slot="start"></ion-icon>
+      Add Media
+    </ion-button>
+  </div>
+
+  <div *ngIf="items.length > 0">
+    <div class="upload-header">
+      <h3>{{ items.length }} items ready to upload</h3>
+      <ion-button fill="clear" (click)="addMedia()">
+        <ion-icon name="camera-outline" slot="start"></ion-icon>
+        Add More
+      </ion-button>
+    </div>
+
+    <ion-list>
+      <ion-card *ngFor="let item of items; trackBy: trackByItemId">
+        <ion-card-content>
+          <div class="upload-item">
+            <div class="item-info">
+              <h4>{{ item.file.name }}</h4>
+              <p>{{ getFileSize(item.file.size) }} • {{ item.kind }}</p>
+              
+              <div *ngIf="item.uploading" class="upload-progress">
+                <ion-progress-bar [value]="item.progress / 100"></ion-progress-bar>
+                <span>{{ item.progress }}%</span>
+              </div>
+              
+              <ion-text *ngIf="item.uploaded" color="success">
+                <p>✓ Uploaded successfully</p>
+              </ion-text>
+              
+              <ion-text *ngIf="item.error" color="danger">
+                <p>{{ item.error }}</p>
+              </ion-text>
+            </div>
+
+            <ion-button 
+              *ngIf="!item.uploaded && !item.uploading" 
+              fill="clear" 
+              color="danger"
+              (click)="removeItem(item.id)"
+            >
+              Remove
+            </ion-button>
+          </div>
+
+          <!-- Watermark settings for images -->
+          <div *ngIf="item.kind === 'IMAGE' && !item.uploaded" class="watermark-settings">
+            <ion-item>
+              <ion-toggle [(ngModel)]="item.watermarkEnabled" slot="end"></ion-toggle>
+              <ion-label>
+                <h3>Watermark</h3>
+                <p>Add text watermark to this image</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="item.watermarkEnabled">
+              <ion-input
+                [(ngModel)]="item.watermarkText"
+                placeholder="Watermark text"
+                maxlength="50"
+              ></ion-input>
+              <ion-label position="stacked">Watermark Text</ion-label>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+    <div class="upload-actions" *ngIf="canUpload()">
+      <ion-button 
+        expand="block" 
+        (click)="uploadAll()"
+        [disabled]="uploading"
+      >
+        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+        {{ uploading ? 'Uploading...' : 'Upload All' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

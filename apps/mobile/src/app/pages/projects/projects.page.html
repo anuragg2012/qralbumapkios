@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>My Projects</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="navigateToScanner()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading projects...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <ion-text color="danger">
+      <p>{{ error }}</p>
+    </ion-text>
+    <ion-button fill="outline" (click)="loadProjects()">Retry</ion-button>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <div *ngIf="projects.length === 0" class="empty-state">
+      <ion-icon name="folder-open-outline" size="large"></ion-icon>
+      <h2>No Projects Yet</h2>
+      <p>Create your first project to get started with QR Albums</p>
+      <ion-button fill="outline" (click)="createProject()">Create Project</ion-button>
+    </div>
+
+    <ion-list *ngIf="projects.length > 0">
+      <ion-card *ngFor="let project of projects" (click)="openProject(project)">
+        <ion-card-content>
+          <div class="project-item">
+            <div class="project-info">
+              <h3>{{ project.name }}</h3>
+              <p>{{ project.albumCount }} albums • Created {{ project.createdAt | date:'shortDate' }}</p>
+              <p class="project-key">Key: {{ project.key }}</p>
+            </div>
+            <ion-icon name="folder-open-outline" class="project-icon"></ion-icon>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createProject()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

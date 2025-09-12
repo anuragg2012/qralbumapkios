@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/projects"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ project?.name || 'Project' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading project...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <ion-text color="danger">
+      <p>{{ error }}</p>
+    </ion-text>
+    <ion-button fill="outline" (click)="loadProject()">Retry</ion-button>
+  </div>
+
+  <div *ngIf="project && !loading && !error">
+    <div class="project-header">
+      <h2>{{ project.name }}</h2>
+      <div class="project-meta">
+        <p>Key: <strong>{{ project.key }}</strong></p>
+        <p>Created: {{ project.createdAt | date:'medium' }}</p>
+        <p>{{ project.albums.length }} albums</p>
+      </div>
+    </div>
+
+    <div *ngIf="project.albums.length === 0" class="empty-state">
+      <ion-icon name="image-outline" size="large"></ion-icon>
+      <h3>No Albums Yet</h3>
+      <p>Create your first album to start collecting photos and videos</p>
+      <ion-button fill="outline" (click)="createAlbum()">Create Album</ion-button>
+    </div>
+
+    <ion-list *ngIf="project.albums.length > 0">
+      <ion-card *ngFor="let album of project.albums" (click)="openAlbum(album)">
+        <ion-card-content>
+          <div class="album-item">
+            <div class="album-info">
+              <h3>{{ album.title }}</h3>
+              <div class="album-meta">
+                <ion-badge [color]="getVersionBadgeColor(album.version)">
+                  <ion-icon [name]="getVersionIcon(album.version)"></ion-icon>
+                  {{ album.version }}
+                </ion-badge>
+                <span>{{ album.itemCount }} items</span>
+                <span>{{ album.createdAt | date:'shortDate' }}</span>
+              </div>
+            </div>
+            <ion-icon name="image-outline" class="album-icon"></ion-icon>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createAlbum()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

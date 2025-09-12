@@ -1,0 +1,37 @@
+{
+  "name": "qr-albums-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QR Albums - Production monorepo for album management and media sharing",
+  "workspaces": [
+    "apps/mobile"
+  ],
+  "scripts": {
+    "dev:mobile": "cd apps/mobile && ionic serve",
+    "dev:api": "cd services/api && dotnet run",
+    "build:mobile": "cd apps/mobile && ionic build",
+    "build:api": "cd services/api && dotnet build",
+    "sync:android": "cd apps/mobile && npx cap sync android",
+    "sync:ios": "cd apps/mobile && npx cap sync ios",
+    "open:android": "cd apps/mobile && npx cap open android",
+    "open:ios": "cd apps/mobile && npx cap open ios",
+    "lint": "eslint apps/mobile/src/**/*.{ts,tsx}",
+    "format": "prettier --write apps/mobile/src/**/*.{ts,tsx,html,scss}",
+    "db:migrate": "cd services/api && dotnet ef migrations add",
+    "db:update": "cd services/api && dotnet ef database update"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@capacitor-community/barcode-scanner": "^4.0.1"
+  }
+}

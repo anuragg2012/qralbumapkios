@@ -1,0 +1,8 @@
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.csproj.AssemblyReference.cache
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.AssemblyInfoInputs.cache
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.AssemblyInfo.cs
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.csproj.CoreCompileInputs.cache
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\anura\prpj\qralbumapkios\services\api\obj\Debug\net8.0\QRAlbums.API.sourcelink.json

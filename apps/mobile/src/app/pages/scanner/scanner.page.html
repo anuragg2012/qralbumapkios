@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/projects"></ion-back-button>
+    </ion-buttons>
+    <ion-title>QR Scanner</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="scanner-container">
+    <div class="scanner-content" *ngIf="!scanning">
+      <ion-icon name="qr-code-outline" size="large"></ion-icon>
+      <h2>Scan QR Code</h2>
+      <p>Point your camera at a QR code to view albums or get more information</p>
+      
+      <ion-button expand="block" (click)="startScan()">
+        <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+        Start Scanning
+      </ion-button>
+    </div>
+
+    <div class="scanning-overlay" *ngIf="scanning">
+      <div class="scan-frame"></div>
+      <div class="scan-instructions">
+        <ion-text color="light">
+          <p>Position QR code within the frame</p>
+        </ion-text>
+        <ion-button fill="outline" color="light" (click)="stopScan()">
+          Cancel
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

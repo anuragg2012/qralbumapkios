@@ -1,0 +1,7 @@
+{
+  "name": "qr-albums-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

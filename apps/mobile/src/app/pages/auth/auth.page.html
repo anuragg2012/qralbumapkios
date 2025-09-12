@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>QR Albums</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="auth-container">
+    <ion-card class="auth-card">
+      <ion-card-content>
+        <div class="logo-section">
+          <ion-icon name="person-outline" size="large"></ion-icon>
+          <h2>Welcome to QR Albums</h2>
+          <p>Create and share albums with QR codes</p>
+        </div>
+
+        <ion-segment [(ngModel)]="segmentValue" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="login">
+            <ion-label>Login</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="register">
+            <ion-label>Register</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <form (ngSubmit)="onSubmit()" class="auth-form">
+          <ion-item>
+            <ion-input
+              type="email"
+              placeholder="Email"
+              [(ngModel)]="email"
+              name="email"
+              required
+            >
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="password"
+              required
+            >
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            </ion-input>
+          </ion-item>
+
+          <ion-item *ngIf="segmentValue === 'register'">
+            <ion-input
+              type="password"
+              placeholder="Confirm Password"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              required
+            >
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            </ion-input>
+          </ion-item>
+
+          <ion-text color="danger" *ngIf="error">
+            <p class="error-text">{{ error }}</p>
+          </ion-text>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="loading"
+            class="auth-button"
+          >
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">{{ segmentValue === 'login' ? 'Login' : 'Register' }}</span>
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ album?.title || 'Album' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="shareAlbum()" [disabled]="!album">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading album...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <ion-text color="danger">
+      <p>{{ error }}</p>
+    </ion-text>
+    <ion-button fill="outline" (click)="loadAlbum()">Retry</ion-button>
+  </div>
+
+  <div *ngIf="album && !loading && !error">
+    <div class="album-header">
+      <div class="album-title">
+        <h2>{{ album.title }}</h2>
+        <ion-badge [color]="getVersionBadgeColor()">
+          <ion-icon [name]="getVersionIcon()"></ion-icon>
+          {{ album.version }}
+        </ion-badge>
+      </div>
+      
+      <div class="album-meta">
+        <p>{{ album.items.length }} items</p>
+        <p *ngIf="album.version === AlbumVersion.RAW && album.selectionLimit > 0">
+          Selection limit: {{ album.selectionLimit }}
+        </p>
+        <p>Created: {{ album.createdAt | date:'medium' }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="album.items.length === 0" class="empty-state">
+      <ion-icon name="images-outline" size="large"></ion-icon>
+      <h3>No Media Yet</h3>
+      <p>Upload photos and videos to this album</p>
+      <ion-button fill="outline" (click)="navigateToUpload()">Upload Media</ion-button>
+    </div>
+
+    <div *ngIf="album.items.length > 0" class="media-grid">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let item of album.items">
+            <div class="media-item">
+              <div class="media-thumbnail">
+                <ion-img [src]="getDisplayUrl(item)" [alt]="'Item ' + item.serialNo"></ion-img>
+                <div class="media-overlay">
+                  <div class="media-info">
+                    <ion-badge color="dark">#{{ item.serialNo }}</ion-badge>
+                    <ion-badge [color]="item.kind === ItemKind.IMAGE ? 'primary' : 'secondary'">
+                      {{ item.kind }}
+                    </ion-badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Show finalize option for RAW albums with items -->
+    <ion-card *ngIf="album.version === AlbumVersion.RAW && album.items.length > 0" class="finalize-card">
+      <ion-card-content>
+        <h3>Ready to Finalize?</h3>
+        <p>View selection insights and create a final album with the most popular photos.</p>
+        <ion-button expand="block" fill="outline">
+          View Insights & Finalize
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="album?.version === AlbumVersion.RAW">
+    <ion-fab-button (click)="navigateToUpload()">
+      <ion-icon name="cloud-upload-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
