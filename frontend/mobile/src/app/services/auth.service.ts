@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Preferences } from '@capacitor/preferences';
-import { environment } from '../../environments/environment';
 import { AuthResponse, LoginRequest, RegisterRequest, User } from '../models/types';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public token$ = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private supabase: SupabaseService) {
     this.loadStoredAuth();
   }
 
@@ -36,20 +35,55 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, request)
-      .pipe(
-        tap(response => this.setAuth(response))
-      );
+    return from(this.supabase.client.auth.signUp({
+      email: request.email,
+      password: request.password
+    })).pipe(
+      map(({ data, error }) => {
+        if (error || !data.user || !data.session) {
+          throw error || new Error('Registration failed');
+        }
+        const user: User = {
+          id: data.user.id,
+          email: data.user.email!,
+          createdAt: data.user.created_at
+        };
+        const response: AuthResponse = {
+          token: data.session.access_token,
+          user
+        };
+        this.setAuth(response);
+        return response;
+      })
+    );
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, request)
-      .pipe(
-        tap(response => this.setAuth(response))
-      );
+    return from(this.supabase.client.auth.signInWithPassword({
+      email: request.email,
+      password: request.password
+    })).pipe(
+      map(({ data, error }) => {
+        if (error || !data.user || !data.session) {
+          throw error || new Error('Login failed');
+        }
+        const user: User = {
+          id: data.user.id,
+          email: data.user.email!,
+          createdAt: data.user.created_at
+        };
+        const response: AuthResponse = {
+          token: data.session.access_token,
+          user
+        };
+        this.setAuth(response);
+        return response;
+      })
+    );
   }
 
   async logout(): Promise<void> {
+    await this.supabase.client.auth.signOut();
     await Preferences.remove({ key: 'auth_token' });
     await Preferences.remove({ key: 'current_user' });
     this.tokenSubject.next(null);
