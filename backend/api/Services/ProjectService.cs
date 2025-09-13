@@ -23,10 +23,10 @@ public class ProjectService : IProjectService
         };
 
         _context.Projects.Add(project);
-        
-        // Initialize counter
+        await _context.SaveChangesAsync();
+
+        // Initialize counter after project ID is generated
         _context.ProjectCounters.Add(new ProjectCounter { ProjectId = project.Id });
-        
         await _context.SaveChangesAsync();
 
         return new ProjectDto(project.Id, project.Name, project.Key, project.CreatedAt, 0);
