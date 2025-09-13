@@ -12,6 +12,7 @@ import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleO
 import { ProjectsService } from '../../services/projects.service';
 import { AlbumsService } from '../../services/albums.service';
 import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion, UpdateProjectRequest } from '../../models/types';
+import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
   selector: 'app-project-detail',
@@ -25,7 +26,7 @@ import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion, UpdatePr
     IonCardContent, IonSpinner, IonText, IonBadge
   ]
 })
-export class ProjectDetailPage implements OnInit {
+export class ProjectDetailPage implements OnInit, ViewWillEnter {
   projectId!: number;
   project: ProjectDetail | null = null;
   loading = true;
@@ -45,8 +46,11 @@ export class ProjectDetailPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.projectId = parseInt(id, 10);
-      this.loadProject();
     }
+  }
+
+  ionViewWillEnter() {
+    this.loadProject();
   }
 
   loadProject() {
@@ -170,7 +174,7 @@ export class ProjectDetailPage implements OnInit {
           role: 'destructive',
           handler: () => {
             this.projectsService.deleteProject(this.projectId).subscribe({
-              next: () => this.router.navigate(['/projects']),
+              next: () => this.router.navigate(['/project']),
               error: (err) => console.error('Failed to delete project:', err)
             });
           }

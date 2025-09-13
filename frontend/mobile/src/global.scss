@@ -33,13 +33,12 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+@import "@ionic/angular/css/palettes/dark.class.css";
 
 /* App-specific global styles */
 .app-title {
   font-weight: 700;
-  color: var(--ion-color-dark);
+  color: var(--ion-text-color);
 }
 
 .text-center {

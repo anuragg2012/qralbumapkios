@@ -11,6 +11,7 @@ import { addIcons } from 'ionicons';
 import { shareOutline, cloudUploadOutline, eyeOutline, checkmarkCircleOutline, imagesOutline, trashOutline } from 'ionicons/icons';
 import { AlbumsService } from '../../services/albums.service';
 import { AlbumDetail, AlbumVersion, ItemKind } from '../../models/types';
+import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
   selector: 'app-album-detail',
@@ -24,7 +25,7 @@ import { AlbumDetail, AlbumVersion, ItemKind } from '../../models/types';
     IonFab, IonFabButton, IonGrid, IonRow, IonCol, IonImg, IonBadge
   ]
 })
-export class AlbumDetailPage implements OnInit {
+export class AlbumDetailPage implements OnInit, ViewWillEnter {
   albumId!: number;
   album: AlbumDetail | null = null;
   loading = true;
@@ -45,8 +46,11 @@ export class AlbumDetailPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.albumId = parseInt(id, 10);
-      this.loadAlbum();
     }
+  }
+
+  ionViewWillEnter() {
+    this.loadAlbum();
   }
 
   loadAlbum() {
@@ -115,7 +119,7 @@ export class AlbumDetailPage implements OnInit {
           role: 'destructive',
           handler: () => {
             this.albumsService.deleteAlbum(this.albumId).subscribe({
-              next: () => this.router.navigate(['/projects', this.album!.projectId]),
+              next: () => this.router.navigate(['/project', this.album!.projectId]),
               error: (err) => console.error('Failed to delete album:', err)
             });
           }

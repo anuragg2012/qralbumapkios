@@ -38,7 +38,7 @@ export class AuthPage {
   ) {
     addIcons({ mailOutline, lockClosedOutline, personOutline });
     if (this.authService.isAuthenticated) {
-      this.router.navigate(['/projects']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -62,7 +62,7 @@ export class AuthPage {
         await this.authService.register(registerRequest).toPromise();
       }
       
-      this.router.navigate(['/projects']);
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.error = error.error?.message || 'Authentication failed';
     } finally {
