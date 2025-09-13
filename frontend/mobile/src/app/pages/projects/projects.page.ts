@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { 
-  IonContent, IonHeader, IonTitle, IonToolbar, IonFab, IonFabButton, 
+import {
+  IonContent, IonHeader, IonTitle, IonToolbar, IonFab, IonFabButton,
   IonIcon, IonList, IonItem, IonLabel, IonCard, IonCardContent,
-  IonButton, IonButtons, IonSpinner, IonText, AlertController
+  IonButton, IonButtons, IonSpinner, IonText, AlertController, IonBackButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addOutline, folderOpenOutline, logOutOutline, qrCodeOutline } from 'ionicons/icons';
 import { ProjectsService } from '../../services/projects.service';
 import { AuthService } from '../../services/auth.service';
-import { Project, CreateProjectRequest, DashboardStats } from '../../models/types';
+import { Project, CreateProjectRequest } from '../../models/types';
 import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
@@ -22,14 +22,13 @@ import { ViewWillEnter } from '@ionic/angular';
     CommonModule,
     IonContent, IonHeader, IonTitle, IonToolbar, IonFab, IonFabButton,
     IonIcon, IonList, IonItem, IonLabel, IonCard, IonCardContent,
-    IonButton, IonButtons, IonSpinner, IonText
+    IonButton, IonButtons, IonSpinner, IonText, IonBackButton
   ]
 })
 export class ProjectsPage implements OnInit, ViewWillEnter {
   projects: Project[] = [];
   loading = true;
   error = '';
-  stats: DashboardStats | null = null;
 
   constructor(
     private projectsService: ProjectsService,
@@ -44,7 +43,6 @@ export class ProjectsPage implements OnInit, ViewWillEnter {
 
   ionViewWillEnter() {
     this.loadProjects();
-    this.loadStats();
   }
 
   loadProjects() {
@@ -61,13 +59,6 @@ export class ProjectsPage implements OnInit, ViewWillEnter {
         this.loading = false;
         console.error(error);
       }
-    });
-  }
-
-  loadStats() {
-    this.projectsService.getStats().subscribe({
-      next: (stats) => (this.stats = stats),
-      error: (err) => console.error('Failed to load stats:', err)
     });
   }
 

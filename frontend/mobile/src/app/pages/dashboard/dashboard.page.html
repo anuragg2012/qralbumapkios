@@ -6,6 +6,29 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card *ngIf="stats" class="stats-card">
+    <ion-card-content>
+      <div class="stats-grid">
+        <div>
+          <h3>{{ stats.projectCount }}</h3>
+          <p>Projects</p>
+        </div>
+        <div>
+          <h3>{{ stats.albumCount }}</h3>
+          <p>Albums</p>
+        </div>
+        <div>
+          <h3>{{ stats.imageCount }}</h3>
+          <p>Images</p>
+        </div>
+        <div>
+          <h3>{{ stats.totalImageMb | number:'1.1-1' }}</h3>
+          <p>MB Uploaded</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
   <ion-list>
     <ion-item routerLink="/project">
       <ion-label>My Projects</ion-label>
