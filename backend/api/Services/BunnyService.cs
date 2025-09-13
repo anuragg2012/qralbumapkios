@@ -18,7 +18,7 @@ public sealed class BunnyService : IBunnyService
         _http = http;
         _opts = opts.Value;
         if (_http.BaseAddress is null && !string.IsNullOrWhiteSpace(_opts.StorageZone))
-            _http.BaseAddress = new Uri($"https://storage.bunnycdn.com/{_opts.StorageZone}/");
+            _http.BaseAddress = new Uri($"https://sg.storage.bunnycdn.com/{_opts.StorageZone}/");
         if (!_http.DefaultRequestHeaders.Contains("AccessKey") && !string.IsNullOrWhiteSpace(_opts.AccessKey))
             _http.DefaultRequestHeaders.Add("AccessKey", _opts.AccessKey);
     }
