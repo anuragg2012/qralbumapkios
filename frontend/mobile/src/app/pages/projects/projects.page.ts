@@ -11,6 +11,7 @@ import { addOutline, folderOpenOutline, logOutOutline, qrCodeOutline } from 'ion
 import { ProjectsService } from '../../services/projects.service';
 import { AuthService } from '../../services/auth.service';
 import { Project, CreateProjectRequest, DashboardStats } from '../../models/types';
+import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
   selector: 'app-projects',
@@ -24,7 +25,7 @@ import { Project, CreateProjectRequest, DashboardStats } from '../../models/type
     IonButton, IonButtons, IonSpinner, IonText
   ]
 })
-export class ProjectsPage implements OnInit {
+export class ProjectsPage implements OnInit, ViewWillEnter {
   projects: Project[] = [];
   loading = true;
   error = '';
@@ -39,7 +40,9 @@ export class ProjectsPage implements OnInit {
     addIcons({ addOutline, folderOpenOutline, logOutOutline, qrCodeOutline });
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter() {
     this.loadProjects();
     this.loadStats();
   }
@@ -104,7 +107,7 @@ export class ProjectsPage implements OnInit {
     this.projectsService.createProject(request).subscribe({
       next: (project) => {
         this.projects.unshift(project);
-        this.router.navigate(['/projects', project.id]);
+        this.router.navigate(['/project', project.id]);
       },
       error: (error) => {
         console.error('Failed to create project:', error);
@@ -113,7 +116,7 @@ export class ProjectsPage implements OnInit {
   }
 
   openProject(project: Project) {
-    this.router.navigate(['/projects', project.id]);
+    this.router.navigate(['/project', project.id]);
   }
 
   async logout() {

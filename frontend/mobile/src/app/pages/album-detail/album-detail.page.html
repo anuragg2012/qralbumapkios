@@ -37,7 +37,7 @@
           {{ album.version }}
         </ion-badge>
       </div>
-      
+
       <div class="album-meta">
         <p>{{ album.items.length }} items</p>
         <p *ngIf="album.version === AlbumVersion.RAW && album.selectionLimit > 0">
@@ -45,6 +45,7 @@
         </p>
         <p>Created: {{ album.createdAt | date:'medium' }}</p>
       </div>
+      <ion-button expand="block" fill="outline" (click)="navigateToUpload()">Upload More</ion-button>
     </div>
 
     <div *ngIf="album.items.length === 0" class="empty-state">
@@ -88,7 +89,7 @@
     </ion-card>
   </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="album?.version === AlbumVersion.RAW">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="album">
     <ion-fab-button (click)="navigateToUpload()">
       <ion-icon name="cloud-upload-outline"></ion-icon>
     </ion-fab-button>
