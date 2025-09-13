@@ -8,6 +8,9 @@
       <ion-button (click)="shareAlbum()" [disabled]="!album">
         <ion-icon name="share-outline"></ion-icon>
       </ion-button>
+      <ion-button (click)="deleteAlbum()" *ngIf="album">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

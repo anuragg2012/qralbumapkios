@@ -39,3 +39,6 @@ public record SubmitSelectionsResponse(bool Success, string? Error = null);
 
 // Selection summary DTOs
 public record SelectionSummaryDto(long ItemId, long SerialNo, string ThumbUrl, int PicksCount);
+
+// Dashboard stats DTO
+public record DashboardStatsDto(int ProjectCount, int AlbumCount, long ImageCount, double TotalImageMb);

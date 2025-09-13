@@ -17,6 +17,8 @@ public interface IProjectService
     Task<List<ProjectDto>> GetUserProjectsAsync(long userId);
     Task<ProjectDetailDto?> GetProjectDetailAsync(long userId, long projectId);
     Task<long> AssignNextSerialAsync(long projectId);
+    Task<bool> DeleteProjectAsync(long userId, long projectId);
+    Task<DashboardStatsDto> GetDashboardStatsAsync(long userId);
 }
 
 public interface IAlbumService
@@ -26,6 +28,7 @@ public interface IAlbumService
     Task<AlbumDto?> UpdateAlbumAsync(long userId, long albumId, UpdateAlbumRequest request);
     Task<List<SelectionSummaryDto>> GetSelectionSummaryAsync(long userId, long albumId);
     Task<AlbumDto> FinalizeAlbumAsync(long userId, long albumId, FinalizeAlbumRequest request);
+    Task<bool> DeleteAlbumAsync(long userId, long albumId);
 }
 
 public interface IMediaService

@@ -136,3 +136,10 @@ export interface SelectionSummary {
 export interface FinalizeAlbumRequest {
   itemIds: number[];
 }
+
+export interface DashboardStats {
+  projectCount: number;
+  albumCount: number;
+  imageCount: number;
+  totalImageMb: number;
+}

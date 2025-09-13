@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Project, ProjectDetail, CreateProjectRequest, UpdateProjectRequest } from '../models/types';
+import { Project, ProjectDetail, CreateProjectRequest, UpdateProjectRequest, DashboardStats } from '../models/types';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -24,5 +24,13 @@ export class ProjectsService {
 
   updateProject(id: number, request: UpdateProjectRequest): Observable<Project> {
     return this.http.put<Project>(`${environment.apiUrl}/projects/${id}`, request);
+  }
+
+  deleteProject(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/projects/${id}`);
+  }
+
+  getStats(): Observable<DashboardStats> {
+    return this.http.get<DashboardStats>(`${environment.apiUrl}/projects/stats`);
   }
 }

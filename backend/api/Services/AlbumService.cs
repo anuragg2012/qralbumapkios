@@ -10,13 +10,15 @@ public class AlbumService : IAlbumService
     private readonly IProjectService _projectService;
     private readonly IQRService _qrService;
     private readonly IConfiguration _config;
+    private readonly IBunnyService _bunnyService;
 
-    public AlbumService(QRAlbumsContext context, IProjectService projectService, IQRService qrService, IConfiguration config)
+    public AlbumService(QRAlbumsContext context, IProjectService projectService, IQRService qrService, IConfiguration config, IBunnyService bunnyService)
     {
         _context = context;
         _projectService = projectService;
         _qrService = qrService;
         _config = config;
+        _bunnyService = bunnyService;
     }
 
     public async Task<AlbumDto> CreateAlbumAsync(long userId, long projectId, CreateAlbumRequest request)
@@ -94,6 +96,20 @@ public class AlbumService : IAlbumService
             .ToListAsync();
 
         return summary;
+    }
+
+    public async Task<bool> DeleteAlbumAsync(long userId, long albumId)
+    {
+        var album = await _context.Albums.FirstOrDefaultAsync(a => a.Id == albumId && a.OwnerId == userId);
+        if (album == null) return false;
+
+        _context.Albums.Remove(album);
+        await _context.SaveChangesAsync();
+
+        var basePath = $"u/{album.OwnerId}/p/{album.ProjectId}/a/{album.Id}";
+        await _bunnyService.DeleteAsync(basePath);
+
+        return true;
     }
 
     public async Task<AlbumDto> FinalizeAlbumAsync(long userId, long albumId, FinalizeAlbumRequest request)

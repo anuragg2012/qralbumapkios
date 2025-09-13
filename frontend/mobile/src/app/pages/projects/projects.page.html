@@ -26,6 +26,29 @@
   </div>
 
   <div *ngIf="!loading && !error">
+    <ion-card *ngIf="stats" class="stats-card">
+      <ion-card-content>
+        <div class="stats-grid">
+          <div>
+            <h3>{{ stats.projectCount }}</h3>
+            <p>Projects</p>
+          </div>
+          <div>
+            <h3>{{ stats.albumCount }}</h3>
+            <p>Albums</p>
+          </div>
+          <div>
+            <h3>{{ stats.imageCount }}</h3>
+            <p>Images</p>
+          </div>
+          <div>
+            <h3>{{ stats.totalImageMb | number:'1.1-1' }}</h3>
+            <p>MB Uploaded</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
     <div *ngIf="projects.length === 0" class="empty-state">
       <ion-icon name="folder-open-outline" size="large"></ion-icon>
       <h2>No Projects Yet</h2>

@@ -7,10 +7,12 @@ namespace QRAlbums.API.Services;
 public class ProjectService : IProjectService
 {
     private readonly QRAlbumsContext _context;
+    private readonly IBunnyService _bunnyService;
 
-    public ProjectService(QRAlbumsContext context)
+    public ProjectService(QRAlbumsContext context, IBunnyService bunnyService)
     {
         _context = context;
+        _bunnyService = bunnyService;
     }
 
     public async Task<ProjectDto> CreateProjectAsync(long userId, CreateProjectRequest request)
@@ -112,6 +114,31 @@ public class ProjectService : IProjectService
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<bool> DeleteProjectAsync(long userId, long projectId)
+    {
+        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId && p.OwnerId == userId);
+        if (project == null) return false;
+
+        _context.Projects.Remove(project);
+        await _context.SaveChangesAsync();
+
+        var basePath = $"u/{project.OwnerId}/p/{project.Id}";
+        await _bunnyService.DeleteAsync(basePath);
+
+        return true;
+    }
+
+    public async Task<DashboardStatsDto> GetDashboardStatsAsync(long userId)
+    {
+        var projectCount = await _context.Projects.CountAsync(p => p.OwnerId == userId);
+        var albumCount = await _context.Albums.CountAsync(a => a.OwnerId == userId);
+        var imageQuery = _context.AlbumItems.Where(i => i.Project.OwnerId == userId && i.Kind == ItemKind.IMAGE);
+        var imageCount = await imageQuery.CountAsync();
+        var totalBytes = await imageQuery.SumAsync(i => (long?)i.Bytes) ?? 0L;
+        var totalMb = totalBytes / 1024d / 1024d;
+        return new DashboardStatsDto(projectCount, albumCount, imageCount, totalMb);
     }
 
     private static string GenerateProjectKey()
