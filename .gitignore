@@ -51,3 +51,5 @@ yarn-error.log*
 /backend/api/obj/QRAlbums.API.csproj.nuget.dgspec.json
 /backend/api/obj/QRAlbums.API.csproj.nuget.g.props
 /backend/api/obj/project.nuget.cache
+/backend/api/obj/Debug/net8.0/QRAlbums.API.MvcApplicationPartsAssemblyInfo.cs
+/backend/api/obj/QRAlbums.API.csproj.nuget.g.targets
