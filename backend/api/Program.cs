@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -24,7 +25,7 @@ builder.Services.AddDbContext<QRAlbumsContext>(opts =>
              Environment.GetEnvironmentVariable("ConnectionStrings__Default");
     if (string.IsNullOrWhiteSpace(cs))
         throw new InvalidOperationException("DB connection string not configured");
-    opts.UseNpgsql(cs);
+    opts.UseMySql(cs, ServerVersion.AutoDetect(cs));
 });
 
 // JWT Authentication
