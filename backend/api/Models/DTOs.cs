@@ -11,6 +11,7 @@ public record UserDto(long Id, string Email, DateTime CreatedAt);
 
 // Project DTOs
 public record CreateProjectRequest(string Name);
+public record UpdateProjectRequest(string Name);
 public record ProjectDto(long Id, string Name, string Key, DateTime CreatedAt, int AlbumCount);
 public record ProjectDetailDto(long Id, string Name, string Key, DateTime CreatedAt, List<AlbumSummaryDto> Albums);
 

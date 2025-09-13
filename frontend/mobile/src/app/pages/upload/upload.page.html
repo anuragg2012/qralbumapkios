@@ -14,6 +14,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <input #fileInput type="file" multiple accept="image/*" (change)="onFilesSelected($event)" hidden />
   <div *ngIf="items.length === 0" class="empty-state">
     <ion-icon name="images-outline" size="large"></ion-icon>
     <h3>No Media Selected</h3>
@@ -27,6 +28,7 @@
   <div *ngIf="items.length > 0">
     <div class="upload-header">
       <h3>{{ items.length }} items ready to upload</h3>
+      <p *ngIf="uploading">{{ overallProgress }}% uploaded</p>
       <ion-button fill="clear" (click)="addMedia()">
         <ion-icon name="camera-outline" slot="start"></ion-icon>
         Add More
@@ -100,3 +102,4 @@
     </div>
   </div>
 </ion-content>
+<ion-loading [isOpen]="uploading" message="Uploading..."></ion-loading>

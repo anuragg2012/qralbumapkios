@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/projects"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ project?.name || 'Project' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="editProject()" *ngIf="project">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

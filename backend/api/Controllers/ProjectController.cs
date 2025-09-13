@@ -31,6 +31,13 @@ public static class ProjectController
             var project = await projectService.GetProjectDetailAsync(userId, id);
             return project != null ? Results.Ok(project) : Results.NotFound();
         });
+
+        group.MapPut("{id:long}", async (long id, UpdateProjectRequest request, IProjectService projectService, HttpContext context) =>
+        {
+            var userId = GetUserId(context);
+            var project = await projectService.UpdateProjectAsync(userId, id, request);
+            return project != null ? Results.Ok(project) : Results.NotFound();
+        });
     }
 
     private static long GetUserId(HttpContext context)

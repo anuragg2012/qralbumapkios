@@ -37,6 +37,9 @@ export class AuthPage {
     private router: Router
   ) {
     addIcons({ mailOutline, lockClosedOutline, personOutline });
+    if (this.authService.isAuthenticated) {
+      this.router.navigate(['/projects']);
+    }
   }
 
   async onSubmit() {

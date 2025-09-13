@@ -32,6 +32,17 @@ public class ProjectService : IProjectService
         return new ProjectDto(project.Id, project.Name, project.Key, project.CreatedAt, 0);
     }
 
+    public async Task<ProjectDto?> UpdateProjectAsync(long userId, long projectId, UpdateProjectRequest request)
+    {
+        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId && p.OwnerId == userId);
+        if (project == null) return null;
+
+        project.Name = request.Name;
+        await _context.SaveChangesAsync();
+
+        return new ProjectDto(project.Id, project.Name, project.Key, project.CreatedAt, project.Albums.Count);
+    }
+
     public async Task<List<ProjectDto>> GetUserProjectsAsync(long userId)
     {
         return await _context.Projects

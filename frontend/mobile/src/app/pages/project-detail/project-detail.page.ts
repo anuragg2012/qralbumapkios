@@ -8,10 +8,10 @@ import {
   IonButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline } from 'ionicons/icons';
 import { ProjectsService } from '../../services/projects.service';
 import { AlbumsService } from '../../services/albums.service';
-import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion } from '../../models/types';
+import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion, UpdateProjectRequest } from '../../models/types';
 
 @Component({
   selector: 'app-project-detail',
@@ -38,7 +38,7 @@ export class ProjectDetailPage implements OnInit {
     private albumsService: AlbumsService,
     private alertController: AlertController
   ) {
-    addIcons({ addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline });
+    addIcons({ addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline });
   }
 
   ngOnInit() {
@@ -64,6 +64,38 @@ export class ProjectDetailPage implements OnInit {
         console.error(error);
       }
     });
+  }
+
+  async editProject() {
+    if (!this.project) return;
+
+    const alert = await this.alertController.create({
+      header: 'Edit Project',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: this.project.name,
+        }
+      ],
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Save',
+          handler: (data) => {
+            const req: UpdateProjectRequest = { name: data.name };
+            this.projectsService.updateProject(this.projectId, req).subscribe({
+              next: (proj) => {
+                if (this.project) this.project.name = proj.name;
+              },
+              error: (err) => console.error('Failed to update project:', err)
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async createAlbum() {

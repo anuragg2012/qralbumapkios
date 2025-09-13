@@ -1,12 +1,14 @@
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { Component, OnInit, TrackByFunction, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { 
+import { HttpEventType } from '@angular/common/http';
+import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
   IonList, IonItem, IonLabel, IonButton, IonIcon, IonToggle, IonInput,
-  IonCard, IonCardContent, IonProgressBar, IonText, ActionSheetController
+  IonCard, IonCardContent, IonProgressBar, IonText, ActionSheetController,
+  IonLoading
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cameraOutline, imagesOutline, videocamOutline, cloudUploadOutline } from 'ionicons/icons';
@@ -34,14 +36,15 @@ interface UploadItem {
     CommonModule, FormsModule,
     IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
     IonList, IonItem, IonLabel, IonButton, IonIcon, IonToggle, IonInput,
-    IonCard, IonCardContent, IonProgressBar, IonText
+    IonCard, IonCardContent, IonProgressBar, IonText, IonLoading
   ]
 })
 export class UploadPage implements OnInit {
   albumId!: number;
   items: UploadItem[] = [];
   uploading = false;
-trackByItemId!: TrackByFunction<UploadItem>;
+  trackByItemId!: TrackByFunction<UploadItem>;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private route: ActivatedRoute,
@@ -106,20 +109,31 @@ trackByItemId!: TrackByFunction<UploadItem>;
   }
 
   async selectFromGallery() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: CameraSource.Photos
-      });
+    this.fileInput.nativeElement.click();
+  }
 
-      if (image.dataUrl) {
-        this.addFileFromDataUrl(image.dataUrl, 'image.jpg', ItemKind.IMAGE);
-      }
-    } catch (error) {
-      console.error('Error selecting from gallery:', error);
-    }
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const files = Array.from(input.files);
+    const remaining = 100 - this.items.length;
+    files.slice(0, remaining).forEach(file => {
+      if (!file.type.startsWith('image')) return;
+      const item: UploadItem = {
+        id: Date.now().toString() + Math.random(),
+        file,
+        kind: ItemKind.IMAGE,
+        watermarkEnabled: false,
+        watermarkText: '© EarthInfo Systems',
+        uploading: false,
+        uploaded: false,
+        progress: 0
+      };
+      this.items.push(item);
+    });
+
+    input.value = '';
   }
 
   private addFileFromDataUrl(dataUrl: string, filename: string, kind: ItemKind) {
@@ -136,6 +150,8 @@ trackByItemId!: TrackByFunction<UploadItem>;
 
     const file = new File([u8arr], filename, { type: mime });
     
+    if (this.items.length >= 100) return;
+
     const item: UploadItem = {
       id: Date.now().toString(),
       file,
@@ -169,7 +185,6 @@ trackByItemId!: TrackByFunction<UploadItem>;
       try {
         await this.uploadItem(item);
         item.uploaded = true;
-        item.progress = 100;
       } catch (error) {
         item.error = 'Upload failed';
         console.error('Upload error:', error);
@@ -188,14 +203,6 @@ trackByItemId!: TrackByFunction<UploadItem>;
 
   private async uploadItem(item: UploadItem): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Simulate progress for demo
-      const interval = setInterval(() => {
-        item.progress += 10;
-        if (item.progress >= 100) {
-          clearInterval(interval);
-        }
-      }, 200);
-
       this.uploadService.uploadFile(
         this.albumId,
         item.file,
@@ -203,12 +210,16 @@ trackByItemId!: TrackByFunction<UploadItem>;
         item.watermarkEnabled,
         item.watermarkText
       ).subscribe({
-        next: (response) => {
-          clearInterval(interval);
-          resolve();
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const total = event.total ?? item.file.size;
+            item.progress = Math.round(100 * event.loaded / total);
+          } else if (event.type === HttpEventType.Response) {
+            item.progress = 100;
+            resolve();
+          }
         },
         error: (error) => {
-          clearInterval(interval);
           reject(error);
         }
       });
@@ -224,5 +235,11 @@ trackByItemId!: TrackByFunction<UploadItem>;
 
   canUpload(): boolean {
     return this.items.length > 0 && !this.uploading && this.items.some(item => !item.uploaded);
+  }
+
+  get overallProgress(): number {
+    const total = this.items.length * 100;
+    const uploaded = this.items.reduce((acc, item) => acc + item.progress, 0);
+    return total ? Math.round(uploaded / total) : 0;
   }
 }
