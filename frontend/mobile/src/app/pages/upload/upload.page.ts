@@ -8,7 +8,7 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
   IonList, IonItem, IonLabel, IonButton, IonIcon, IonToggle, IonInput,
   IonCard, IonCardContent, IonProgressBar, IonText, ActionSheetController,
-  IonLoading
+  IonLoading, ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cameraOutline, imagesOutline, videocamOutline, cloudUploadOutline } from 'ionicons/icons';
@@ -19,8 +19,6 @@ interface UploadItem {
   id: string;
   file: File;
   kind: ItemKind;
-  watermarkEnabled: boolean;
-  watermarkText: string;
   uploading: boolean;
   uploaded: boolean;
   progress: number;
@@ -43,6 +41,8 @@ export class UploadPage implements OnInit {
   albumId!: number;
   items: UploadItem[] = [];
   uploading = false;
+  watermarkEnabled = false;
+  watermarkText = '© EarthInfo Systems';
   trackByItemId!: TrackByFunction<UploadItem>;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -50,7 +50,8 @@ export class UploadPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private uploadService: UploadService,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private toastController: ToastController
   ) {
     addIcons({ cameraOutline, imagesOutline, videocamOutline, cloudUploadOutline });
   }
@@ -124,8 +125,6 @@ export class UploadPage implements OnInit {
         id: Date.now().toString() + Math.random(),
         file,
         kind: ItemKind.IMAGE,
-        watermarkEnabled: false,
-        watermarkText: '© EarthInfo Systems',
         uploading: false,
         uploaded: false,
         progress: 0
@@ -156,8 +155,6 @@ export class UploadPage implements OnInit {
       id: Date.now().toString(),
       file,
       kind,
-      watermarkEnabled: false,
-      watermarkText: '© EarthInfo Systems',
       uploading: false,
       uploaded: false,
       progress: 0
@@ -197,6 +194,12 @@ export class UploadPage implements OnInit {
 
     // Navigate back if all uploads successful
     if (this.items.every(item => item.uploaded)) {
+      const toast = await this.toastController.create({
+        message: 'Upload complete',
+        duration: 2000,
+        color: 'success'
+      });
+      await toast.present();
       this.router.navigate(['/albums', this.albumId]);
     }
   }
@@ -207,8 +210,8 @@ export class UploadPage implements OnInit {
         this.albumId,
         item.file,
         item.kind,
-        item.watermarkEnabled,
-        item.watermarkText
+        this.watermarkEnabled,
+        this.watermarkText
       ).subscribe({
         next: (event) => {
           if (event.type === HttpEventType.UploadProgress) {
