@@ -82,4 +82,15 @@ public class MediaService : IMediaService
 
         return new UploadResponse(item.Id, item.ProjectId, item.AlbumId, item.SerialNo, srcUrl, wmUrl, thumbUrl);
     }
+
+    public async Task<bool> DeleteItemAsync(long albumId, long itemId)
+    {
+        var item = await _context.AlbumItems.FirstOrDefaultAsync(i => i.Id == itemId && i.AlbumId == albumId);
+        if (item == null) return false;
+
+        _context.AlbumItems.Remove(item);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
 }

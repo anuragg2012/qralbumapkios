@@ -27,6 +27,14 @@ public static class AlbumController
             return album != null ? Results.Ok(album) : Results.NotFound();
         });
 
+        // Update album
+        group.MapPut("/albums/{id:long}", async (long id, UpdateAlbumRequest request, IAlbumService albumService, HttpContext context) =>
+        {
+            var userId = GetUserId(context);
+            var album = await albumService.UpdateAlbumAsync(userId, id, request);
+            return album != null ? Results.Ok(album) : Results.NotFound();
+        });
+
         // Get selection summary
         group.MapGet("/albums/{id:long}/selections/summary", async (long id, IAlbumService albumService, HttpContext context) =>
         {

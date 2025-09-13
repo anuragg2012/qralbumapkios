@@ -17,6 +17,7 @@ public record ProjectDetailDto(long Id, string Name, string Key, DateTime Create
 
 // Album DTOs
 public record CreateAlbumRequest(string Title, int SelectionLimit = 0);
+public record UpdateAlbumRequest(string Title);
 public record AlbumDto(long Id, long ProjectId, string Slug, string Title, AlbumVersion Version, bool AllowSelection, int SelectionLimit, AlbumStatus Status, DateTime CreatedAt, string ShareUrl, string QrPngBase64);
 public record AlbumSummaryDto(long Id, string Slug, string Title, AlbumVersion Version, AlbumStatus Status, int ItemCount, DateTime CreatedAt);
 public record AlbumDetailDto(long Id, long ProjectId, string Slug, string Title, AlbumVersion Version, bool AllowSelection, int SelectionLimit, AlbumStatus Status, DateTime CreatedAt, List<AlbumItemDto> Items);

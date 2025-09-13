@@ -61,6 +61,20 @@ public class AlbumService : IAlbumService
         return new AlbumDetailDto(album.Id, album.ProjectId, album.Slug, album.Title, album.Version, album.AllowSelection, album.SelectionLimit, album.Status, album.CreatedAt, items);
     }
 
+    public async Task<AlbumDto?> UpdateAlbumAsync(long userId, long albumId, UpdateAlbumRequest request)
+    {
+        var album = await _context.Albums.FirstOrDefaultAsync(a => a.Id == albumId && a.OwnerId == userId);
+        if (album == null) return null;
+
+        album.Title = request.Title;
+        await _context.SaveChangesAsync();
+
+        var shareUrl = $"{_config["Frontend:ViewerBaseUrl"]}/a/{album.Slug}";
+        var qrPngBase64 = _qrService.GenerateQRCodeBase64(shareUrl);
+
+        return new AlbumDto(album.Id, album.ProjectId, album.Slug, album.Title, album.Version, album.AllowSelection, album.SelectionLimit, album.Status, album.CreatedAt, shareUrl, qrPngBase64);
+    }
+
     public async Task<List<SelectionSummaryDto>> GetSelectionSummaryAsync(long userId, long albumId)
     {
         // Verify ownership

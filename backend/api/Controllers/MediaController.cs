@@ -28,6 +28,12 @@ public static class MediaController
             return Results.Created($"/albums/{albumId}/items/{result.ItemId}", result);
         }).DisableAntiforgery();
 
+        albumGroup.MapDelete("{albumId:long}/items/{itemId:long}", async (long albumId, long itemId, IMediaService mediaService) =>
+        {
+            var success = await mediaService.DeleteItemAsync(albumId, itemId);
+            return success ? Results.NoContent() : Results.NotFound();
+        });
+
         var mediaGroup = app.MapGroup("/media").WithTags("Media").RequireAuthorization();
 
         mediaGroup.MapGet("cdn", (string path, IBunnyService bunnyService) =>

@@ -23,6 +23,7 @@ public interface IAlbumService
 {
     Task<AlbumDto> CreateAlbumAsync(long userId, long projectId, CreateAlbumRequest request);
     Task<AlbumDetailDto?> GetAlbumDetailAsync(long userId, long albumId);
+    Task<AlbumDto?> UpdateAlbumAsync(long userId, long albumId, UpdateAlbumRequest request);
     Task<List<SelectionSummaryDto>> GetSelectionSummaryAsync(long userId, long albumId);
     Task<AlbumDto> FinalizeAlbumAsync(long userId, long albumId, FinalizeAlbumRequest request);
 }
@@ -30,6 +31,7 @@ public interface IAlbumService
 public interface IMediaService
 {
     Task<UploadResponse> UploadItemAsync(long albumId, IFormFile file, ItemKind kind, bool watermarkEnabled = false, string? watermarkText = null);
+    Task<bool> DeleteItemAsync(long albumId, long itemId);
 }
 
 public interface ISelectionService
