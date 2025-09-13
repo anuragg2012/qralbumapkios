@@ -29,7 +29,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
             entity.HasIndex(e => e.Email).IsUnique();
             entity.Property(e => e.PasswordHash).IsRequired();
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         // Project
@@ -40,7 +42,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.Property(e => e.Name).IsRequired().HasMaxLength(160);
             entity.Property(e => e.Key).IsRequired().HasMaxLength(24);
             entity.HasIndex(e => e.Key).IsUnique();
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             
             entity.HasOne(e => e.Owner)
                 .WithMany(e => e.Projects)
@@ -72,7 +76,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.Property(e => e.AllowSelection).HasDefaultValue(true);
             entity.Property(e => e.SelectionLimit).HasDefaultValue(0);
             entity.Property(e => e.Status).HasDefaultValue(AlbumStatus.ACTIVE);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             
             entity.HasOne(e => e.Project)
                 .WithMany(e => e.Albums)
@@ -94,7 +100,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.Property(e => e.Kind).IsRequired();
             entity.Property(e => e.SrcUrl).IsRequired();
             entity.Property(e => e.SortOrder).HasDefaultValue(0);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             
             entity.HasIndex(e => new { e.ProjectId, e.SerialNo }).IsUnique();
             
@@ -117,7 +125,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.Property(e => e.SessionKey).IsRequired().HasMaxLength(22);
             entity.HasIndex(e => e.SessionKey).IsUnique();
             entity.Property(e => e.Submitted).HasDefaultValue(false);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             
             entity.HasOne(e => e.Album)
                 .WithMany()
@@ -131,7 +141,9 @@ public sealed class QRAlbumsContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.SessionKey).IsRequired().HasMaxLength(22);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             
             entity.HasIndex(e => new { e.AlbumId, e.SessionKey, e.ItemId }).IsUnique();
             
