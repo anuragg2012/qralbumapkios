@@ -35,6 +35,14 @@ public static class AlbumController
             return album != null ? Results.Ok(album) : Results.NotFound();
         });
 
+        // Delete album
+        group.MapDelete("/albums/{id:long}", async (long id, IAlbumService albumService, HttpContext context) =>
+        {
+            var userId = GetUserId(context);
+            var ok = await albumService.DeleteAlbumAsync(userId, id);
+            return ok ? Results.NoContent() : Results.NotFound();
+        });
+
         // Get selection summary
         group.MapGet("/albums/{id:long}/selections/summary", async (long id, IAlbumService albumService, HttpContext context) =>
         {

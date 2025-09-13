@@ -8,7 +8,7 @@ import {
   IonButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline } from 'ionicons/icons';
+import { addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline, trashOutline } from 'ionicons/icons';
 import { ProjectsService } from '../../services/projects.service';
 import { AlbumsService } from '../../services/albums.service';
 import { ProjectDetail, AlbumSummary, CreateAlbumRequest, AlbumVersion, UpdateProjectRequest } from '../../models/types';
@@ -38,7 +38,7 @@ export class ProjectDetailPage implements OnInit {
     private albumsService: AlbumsService,
     private alertController: AlertController
   ) {
-    addIcons({ addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline });
+    addIcons({ addOutline, imageOutline, videocamOutline, eyeOutline, checkmarkCircleOutline, createOutline, trashOutline });
   }
 
   ngOnInit() {
@@ -157,5 +157,27 @@ export class ProjectDetailPage implements OnInit {
 
   getVersionIcon(version: AlbumVersion): string {
     return version === AlbumVersion.RAW ? 'eye-outline' : 'checkmark-circle-outline';
+  }
+
+  async deleteProject() {
+    const alert = await this.alertController.create({
+      header: 'Delete Project',
+      message: 'Delete this project and all its albums? This cannot be undone.',
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.projectsService.deleteProject(this.projectId).subscribe({
+              next: () => this.router.navigate(['/projects']),
+              error: (err) => console.error('Failed to delete project:', err)
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

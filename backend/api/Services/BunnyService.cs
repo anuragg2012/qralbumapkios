@@ -33,6 +33,13 @@ public sealed class BunnyService : IBunnyService
         return res.IsSuccessStatusCode;
     }
 
+    public async Task<bool> DeleteAsync(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("path required");
+        var res = await _http.DeleteAsync(path.TrimStart('/') + "?recursive=true");
+        return res.IsSuccessStatusCode;
+    }
+
     public string BuildCdnUrl(string path)
         => string.IsNullOrWhiteSpace(_opts.CdnBase) ? path : $"{_opts.CdnBase.TrimEnd('/')}/{path.TrimStart('/')}";
 }

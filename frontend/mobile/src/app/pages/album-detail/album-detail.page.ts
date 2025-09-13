@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Share } from '@capacitor/share';
-import { 
+import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
   IonButton, IonIcon, IonCard, IonCardContent, IonSpinner, IonText,
-  IonFab, IonFabButton, IonGrid, IonRow, IonCol, IonImg, IonBadge
+  IonFab, IonFabButton, IonGrid, IonRow, IonCol, IonImg, IonBadge, AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { shareOutline, cloudUploadOutline, eyeOutline, checkmarkCircleOutline, imagesOutline } from 'ionicons/icons';
+import { shareOutline, cloudUploadOutline, eyeOutline, checkmarkCircleOutline, imagesOutline, trashOutline } from 'ionicons/icons';
 import { AlbumsService } from '../../services/albums.service';
 import { AlbumDetail, AlbumVersion, ItemKind } from '../../models/types';
 
@@ -35,9 +35,10 @@ export class AlbumDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private albumsService: AlbumsService
+    private albumsService: AlbumsService,
+    private alertController: AlertController
   ) {
-    addIcons({ shareOutline, cloudUploadOutline, eyeOutline, checkmarkCircleOutline, imagesOutline });
+    addIcons({ shareOutline, cloudUploadOutline, eyeOutline, checkmarkCircleOutline, imagesOutline, trashOutline });
   }
 
   ngOnInit() {
@@ -99,5 +100,29 @@ export class AlbumDetailPage implements OnInit {
       return item.wmUrl;
     }
     return item.thumbUrl || item.srcUrl;
+  }
+
+  async deleteAlbum() {
+    if (!this.album) return;
+
+    const alert = await this.alertController.create({
+      header: 'Delete Album',
+      message: 'Delete this album and all its media? This cannot be undone.',
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.albumsService.deleteAlbum(this.albumId).subscribe({
+              next: () => this.router.navigate(['/projects', this.album!.projectId]),
+              error: (err) => console.error('Failed to delete album:', err)
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

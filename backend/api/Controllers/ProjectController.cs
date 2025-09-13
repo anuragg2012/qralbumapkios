@@ -38,6 +38,20 @@ public static class ProjectController
             var project = await projectService.UpdateProjectAsync(userId, id, request);
             return project != null ? Results.Ok(project) : Results.NotFound();
         });
+
+        group.MapDelete("{id:long}", async (long id, IProjectService projectService, HttpContext context) =>
+        {
+            var userId = GetUserId(context);
+            var ok = await projectService.DeleteProjectAsync(userId, id);
+            return ok ? Results.NoContent() : Results.NotFound();
+        });
+
+        group.MapGet("/stats", async (IProjectService projectService, HttpContext context) =>
+        {
+            var userId = GetUserId(context);
+            var stats = await projectService.GetDashboardStatsAsync(userId);
+            return Results.Ok(stats);
+        });
     }
 
     private static long GetUserId(HttpContext context)

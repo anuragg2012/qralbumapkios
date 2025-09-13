@@ -10,7 +10,7 @@ import { addIcons } from 'ionicons';
 import { addOutline, folderOpenOutline, logOutOutline, qrCodeOutline } from 'ionicons/icons';
 import { ProjectsService } from '../../services/projects.service';
 import { AuthService } from '../../services/auth.service';
-import { Project, CreateProjectRequest } from '../../models/types';
+import { Project, CreateProjectRequest, DashboardStats } from '../../models/types';
 
 @Component({
   selector: 'app-projects',
@@ -28,6 +28,7 @@ export class ProjectsPage implements OnInit {
   projects: Project[] = [];
   loading = true;
   error = '';
+  stats: DashboardStats | null = null;
 
   constructor(
     private projectsService: ProjectsService,
@@ -40,6 +41,7 @@ export class ProjectsPage implements OnInit {
 
   ngOnInit() {
     this.loadProjects();
+    this.loadStats();
   }
 
   loadProjects() {
@@ -56,6 +58,13 @@ export class ProjectsPage implements OnInit {
         this.loading = false;
         console.error(error);
       }
+    });
+  }
+
+  loadStats() {
+    this.projectsService.getStats().subscribe({
+      next: (stats) => (this.stats = stats),
+      error: (err) => console.error('Failed to load stats:', err)
     });
   }
 

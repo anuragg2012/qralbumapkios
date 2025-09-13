@@ -34,4 +34,8 @@ export class AlbumsService {
   finalizeAlbum(albumId: number, request: FinalizeAlbumRequest): Observable<Album> {
     return this.http.post<Album>(`${environment.apiUrl}/albums/${albumId}/finalize`, request);
   }
+
+  deleteAlbum(albumId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/albums/${albumId}`);
+  }
 }
