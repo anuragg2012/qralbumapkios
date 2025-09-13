@@ -39,6 +39,10 @@ export interface CreateProjectRequest {
   name: string;
 }
 
+export interface UpdateProjectRequest {
+  name: string;
+}
+
 export enum AlbumVersion {
   RAW = 'RAW',
   FINAL = 'FINAL'

@@ -13,6 +13,7 @@ public interface IAuthService
 public interface IProjectService
 {
     Task<ProjectDto> CreateProjectAsync(long userId, CreateProjectRequest request);
+    Task<ProjectDto?> UpdateProjectAsync(long userId, long projectId, UpdateProjectRequest request);
     Task<List<ProjectDto>> GetUserProjectsAsync(long userId);
     Task<ProjectDetailDto?> GetProjectDetailAsync(long userId, long projectId);
     Task<long> AssignNextSerialAsync(long projectId);
