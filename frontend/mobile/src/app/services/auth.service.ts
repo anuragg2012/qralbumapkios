@@ -16,11 +16,9 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public token$ = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.loadStoredAuth();
-  }
+  constructor(private http: HttpClient) {}
 
-  private async loadStoredAuth() {
+  async init() {
     try {
       const { value: token } = await Preferences.get({ key: 'auth_token' });
       const { value: userJson } = await Preferences.get({ key: 'current_user' });
