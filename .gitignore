@@ -53,3 +53,6 @@ yarn-error.log*
 /backend/api/obj/project.nuget.cache
 /backend/api/obj/Debug/net8.0/QRAlbums.API.MvcApplicationPartsAssemblyInfo.cs
 /backend/api/obj/QRAlbums.API.csproj.nuget.g.targets
+*.bin
+*.wsuo
+/.vs/qralbumapkios/v17/DocumentLayout.json
