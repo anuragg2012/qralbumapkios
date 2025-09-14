@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel,
-  IonCard, IonCardContent
+  IonCard, IonCardContent, IonButtons, IonButton, IonIcon
 } from '@ionic/angular/standalone';
 import { ProjectsService } from '../../services/projects.service';
 import { DashboardStats } from '../../models/types';
@@ -18,7 +18,7 @@ import { ViewWillEnter } from '@ionic/angular';
     CommonModule,
     RouterLink,
     IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel,
-    IonCard, IonCardContent
+    IonCard, IonCardContent, IonButtons, IonButton, IonIcon
   ]
 })
 export class DashboardPage implements ViewWillEnter {
