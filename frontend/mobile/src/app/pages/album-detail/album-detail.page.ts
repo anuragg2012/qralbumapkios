@@ -59,6 +59,7 @@ export class AlbumDetailPage implements OnInit, ViewWillEnter {
 
     this.albumsService.getAlbumDetail(this.albumId).subscribe({
       next: (album) => {
+        album.items.sort((a, b) => a.serialNo - b.serialNo);
         this.album = album;
         this.loading = false;
       },

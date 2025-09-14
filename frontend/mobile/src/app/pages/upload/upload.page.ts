@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Preferences } from '@capacitor/preferences';
 import { HttpEventType } from '@angular/common/http';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
@@ -60,6 +61,14 @@ export class UploadPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('albumId');
     if (id) {
       this.albumId = parseInt(id, 10);
+    }
+    this.loadWatermark();
+  }
+
+  private async loadWatermark() {
+    const { value } = await Preferences.get({ key: 'watermark_text' });
+    if (value) {
+      this.watermarkText = value;
     }
   }
 

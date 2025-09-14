@@ -45,6 +45,13 @@ export class AuthService {
       .pipe(tap((resp) => this.setAuth(resp)));
   }
 
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/change-password`, {
+      currentPassword,
+      newPassword
+    });
+  }
+
   async logout(): Promise<void> {
     await Preferences.remove({ key: 'auth_token' });
     await Preferences.remove({ key: 'current_user' });
