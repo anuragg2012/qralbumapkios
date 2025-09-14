@@ -11,6 +11,8 @@ import {
   IonItem,
   IonLabel,
   IonNote,
+  IonButtons,
+  IonBackButton,
   AlertController
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
@@ -29,7 +31,9 @@ import { AuthService } from '../../services/auth.service';
     IonList,
     IonItem,
     IonLabel,
-    IonNote
+    IonNote,
+    IonButtons,
+    IonBackButton
   ]
 })
 export class SettingsPage {
@@ -66,6 +70,49 @@ export class SettingsPage {
           handler: async (data) => {
             this.watermarkText = data.watermark;
             await Preferences.set({ key: 'watermark_text', value: this.watermarkText });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async changePassword() {
+    const alert = await this.alertController.create({
+      header: 'Change Password',
+      inputs: [
+        { name: 'currentPassword', type: 'password', placeholder: 'Current Password' },
+        { name: 'newPassword', type: 'password', placeholder: 'New Password' },
+        { name: 'confirmPassword', type: 'password', placeholder: 'Confirm New Password' }
+      ],
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Change',
+          handler: async (data) => {
+            if (data.newPassword !== data.confirmPassword) {
+              const mismatch = await this.alertController.create({
+                message: 'Passwords do not match',
+                buttons: ['OK']
+              });
+              await mismatch.present();
+              return false;
+            }
+            try {
+              await this.authService.changePassword(data.currentPassword, data.newPassword).toPromise();
+              const success = await this.alertController.create({
+                message: 'Password changed successfully',
+                buttons: ['OK']
+              });
+              await success.present();
+            } catch (err) {
+              const failed = await this.alertController.create({
+                message: err.error?.message || 'Failed to change password',
+                buttons: ['OK']
+              });
+              await failed.present();
+            }
           }
         }
       ]
