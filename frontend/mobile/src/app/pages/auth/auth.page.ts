@@ -60,8 +60,9 @@ export class AuthPage {
         }
         const registerRequest: RegisterRequest = { email: this.email, password: this.password };
         await this.authService.register(registerRequest).toPromise();
+        this.router.navigate(['/plans']);
+        return;
       }
-      
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.error = error.error?.message || 'Authentication failed';

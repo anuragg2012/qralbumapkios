@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Plans</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-segment [(ngModel)]="period">
+    <ion-segment-button value="monthly">
+      <ion-label>Monthly</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="yearly">
+      <ion-label>Yearly</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div class="plans-grid">
+    <ion-card *ngFor="let plan of plans">
+      <ion-card-header>
+        <ion-card-title>{{ plan.name }}</ion-card-title>
+        <div class="price">
+          {{ period === 'monthly' ? plan.monthly : plan.yearly | currency:'USD' }}
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let f of plan.features">{{ f }}</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
