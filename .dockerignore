@@ -1,0 +1,12 @@
+.git
+.gitignore
+Dockerfile
+node_modules
+**/node_modules
+frontend/mobile/www
+frontend/mobile/dist
+backend/api/bin
+backend/api/obj
+backend/api/wwwroot
+infrastructure
+*.md

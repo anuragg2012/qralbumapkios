@@ -85,6 +85,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+
 app.UseCors("AllowMobile");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -96,5 +98,7 @@ app.MapAlbumEndpoints();
 app.MapMediaEndpoints();
 app.MapViewerEndpoints();
 app.MapSelectionEndpoints();
+
+app.MapFallbackToFile("/index.html");
 
 app.Run();
